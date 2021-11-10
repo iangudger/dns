@@ -1890,6 +1890,32 @@ func (n *Name) GoString() string {
 	return `dnsmessage.MustNewName("` + printString(b) + `")`
 }
 
+func (n *Name) Equals(other *Name) bool {
+	if n == other {
+		return true
+	}
+	if n == nil || other == nil {
+		return false
+	}
+	if n.length != other.length {
+		return false
+	}
+	for i := 0; i < int(n.length); i++ {
+		a := n.data[i]
+		b := other.data[i]
+		if 'A' <= a && a <= 'Z' {
+			a += 0x20
+		}
+		if 'A' <= b && b <= 'Z' {
+			b += 0x20
+		}
+		if a != b {
+			return false
+		}
+	}
+	return true
+}
+
 func requiresNumberEscape(c byte) bool {
 	return c < ' ' && c != '\t' || '~' < c
 }
@@ -2046,7 +2072,7 @@ func (n *Name) encode(b []byte) error {
 			continue
 
 		}
-		if len(name) > 64 {
+		if len(name) - startLen > 63 {
 			return errSegTooLong
 		}
 		lenB[0] = byte(len(name) - startLen)

@@ -247,6 +247,7 @@ func TestName(t *testing.T) {
 
 		// Long names.
 		"123456789a123456789b123456789c123456789d123456789e123456789f123.",
+		"uz5dkwpjfvfwb9rh1qj93mtup0gw65s6j7vqqumch0r9gzlu8qxx39.free.ns.buddyns.com.",
 	}
 
 	for _, name := range names {
@@ -1036,7 +1037,8 @@ func TestResourcePack(t *testing.T) {
 		},
 	} {
 		_, err := tt.m.Pack()
-		if !reflect.DeepEqual(err, tt.err) {
+		// Silence deepequalerrors nogo error.
+		if !reflect.DeepEqual(interface{}(err), interface{}(tt.err)) {
 			t.Errorf("got Message{%v}.Pack() = %v, want %v", tt.m, err, tt.err)
 		}
 	}
