@@ -247,7 +247,7 @@ func TestName(t *testing.T) {
 
 		// Long names.
 		"123456789a123456789b123456789c123456789d123456789e123456789f123.",
-		"uz5dkwpjfvfwb9rh1qj93mtup0gw65s6j7vqqumch0r9gzlu8qxx39.free.ns.buddyns.com.",
+		"uz5dkwpjfvfwb9rh1qj93mtup0gw65s6j7vqqumch0r9gzlu8qxx39.free.ns.example.com.",
 	}
 
 	for _, name := range names {
