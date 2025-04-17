@@ -7,6 +7,7 @@ package dnsserver
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -110,7 +111,13 @@ func (s *Server) handleTCP(conn net.Conn) error {
 
 		// Read the message length.
 		if _, err := io.ReadFull(conn, readBuf[:2]); err != nil {
-			return fmt.Errorf("reading request length: %v", err)
+			if !errors.Is(err, io.EOF) {
+				return fmt.Errorf("reading request length: %v", err)
+			}
+
+			// It is normal for the client to close the connection
+			// after a transaction.
+			return nil
 		}
 		l := int(binary.BigEndian.Uint16(readBuf[:2]))
 
